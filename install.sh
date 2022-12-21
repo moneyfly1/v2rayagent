@@ -261,37 +261,37 @@ readInstallType() {
 	hysteriaConfigPath=
 
 	# 1.检测安装目录
-	if [[ -d "/etc/v2ray-agent" ]]; then
+	if [[ -d "/etcv2rayagent" ]]; then
 		# 检测安装方式 v2ray-core
-		if [[ -d "/etc/v2ray-agent/v2ray" && -f "/etc/v2ray-agent/v2ray/v2ray" && -f "/etc/v2ray-agent/v2ray/v2ctl" ]]; then
-			if [[ -d "/etc/v2ray-agent/v2ray/conf" && -f "/etc/v2ray-agent/v2ray/conf/02_VLESS_TCP_inbounds.json" ]]; then
-				configPath=/etc/v2ray-agent/v2ray/conf/
-				if grep </etc/v2ray-agent/v2ray/conf/02_VLESS_TCP_inbounds.json -q '"security": "tls"'; then
+		if [[ -d "/etcv2rayagent/v2ray" && -f "/etcv2rayagent/v2ray/v2ray" && -f "/etcv2rayagent/v2ray/v2ctl" ]]; then
+			if [[ -d "/etcv2rayagent/v2ray/conf" && -f "/etcv2rayagent/v2ray/conf/02_VLESS_TCP_inbounds.json" ]]; then
+				configPath=/etcv2rayagent/v2ray/conf/
+				if grep </etcv2rayagent/v2ray/conf/02_VLESS_TCP_inbounds.json -q '"security": "tls"'; then
 					# 不带XTLS的v2ray-core
 					coreInstallType=2
-					ctlPath=/etc/v2ray-agent/v2ray/v2ctl
-				elif grep </etc/v2ray-agent/v2ray/conf/02_VLESS_TCP_inbounds.json -q '"security": "xtls"'; then
+					ctlPath=/etcv2rayagent/v2ray/v2ctl
+				elif grep </etcv2rayagent/v2ray/conf/02_VLESS_TCP_inbounds.json -q '"security": "xtls"'; then
 					# 带XTLS的v2ray-core
-					ctlPath=/etc/v2ray-agent/v2ray/v2ctl
+					ctlPath=/etcv2rayagent/v2ray/v2ctl
 					coreInstallType=3
 				fi
 			fi
 		fi
 
-		if [[ -d "/etc/v2ray-agent/xray" && -f "/etc/v2ray-agent/xray/xray" ]]; then
+		if [[ -d "/etcv2rayagent/xray" && -f "/etcv2rayagent/xray/xray" ]]; then
 			# 这里检测xray-core
-			if [[ -d "/etc/v2ray-agent/xray/conf" ]] && [[ -f "/etc/v2ray-agent/xray/conf/02_VLESS_TCP_inbounds.json" || -f "/etc/v2ray-agent/xray/conf/02_trojan_TCP_inbounds.json" ]]; then
+			if [[ -d "/etcv2rayagent/xray/conf" ]] && [[ -f "/etcv2rayagent/xray/conf/02_VLESS_TCP_inbounds.json" || -f "/etcv2rayagent/xray/conf/02_trojan_TCP_inbounds.json" ]]; then
 				# xray-core
-				configPath=/etc/v2ray-agent/xray/conf/
-				ctlPath=/etc/v2ray-agent/xray/xray
+				configPath=/etcv2rayagent/xray/conf/
+				ctlPath=/etcv2rayagent/xray/xray
 				coreInstallType=1
 			fi
 		fi
 
-		if [[ -d "/etc/v2ray-agent/hysteria" && -f "/etc/v2ray-agent/hysteria/hysteria" ]]; then
+		if [[ -d "/etcv2rayagent/hysteria" && -f "/etcv2rayagent/hysteria/hysteria" ]]; then
 			# 这里检测 hysteria
-			if [[ -d "/etc/v2ray-agent/hysteria/conf" ]] && [[ -f "/etc/v2ray-agent/hysteria/conf/config.json" ]] && [[ -f "/etc/v2ray-agent/hysteria/conf/client_network.json" ]]; then
-				hysteriaConfigPath=/etc/v2ray-agent/hysteria/conf/
+			if [[ -d "/etcv2rayagent/hysteria/conf" ]] && [[ -f "/etcv2rayagent/hysteria/conf/config.json" ]] && [[ -f "/etcv2rayagent/hysteria/conf/client_network.json" ]]; then
+				hysteriaConfigPath=/etcv2rayagent/hysteria/conf/
 			fi
 		fi
 
@@ -568,19 +568,19 @@ showInstallStatus() {
 # 清理旧残留
 cleanUp() {
 	if [[ "$1" == "v2rayClean" ]]; then
-		rm -rf "$(find /etc/v2ray-agent/v2ray/* | grep -E '(config_full.json|conf)')"
+		rm -rf "$(find /etcv2rayagent/v2ray/* | grep -E '(config_full.json|conf)')"
 		handleV2Ray stop >/dev/null
 		rm -f /etc/systemd/system/v2ray.service
 	elif [[ "$1" == "xrayClean" ]]; then
-		rm -rf "$(find /etc/v2ray-agent/xray/* | grep -E '(config_full.json|conf)')"
+		rm -rf "$(find /etcv2rayagent/xray/* | grep -E '(config_full.json|conf)')"
 		handleXray stop >/dev/null
 		rm -f /etc/systemd/system/xray.service
 
 	elif [[ "$1" == "v2rayDel" ]]; then
-		rm -rf /etc/v2ray-agent/v2ray/*
+		rm -rf /etcv2rayagent/v2ray/*
 
 	elif [[ "$1" == "xrayDel" ]]; then
-		rm -rf /etc/v2ray-agent/xray/*
+		rm -rf /etcv2rayagent/xray/*
 	fi
 }
 
@@ -598,17 +598,17 @@ checkBTPanel
 
 # 初始化安装目录
 mkdirTools() {
-	mkdir -p /etc/v2ray-agent/tls
-	mkdir -p /etc/v2ray-agent/subscribe
-	mkdir -p /etc/v2ray-agent/subscribe_tmp
-	mkdir -p /etc/v2ray-agent/v2ray/conf
-	mkdir -p /etc/v2ray-agent/v2ray/tmp
-	mkdir -p /etc/v2ray-agent/xray/conf
-	mkdir -p /etc/v2ray-agent/xray/tmp
-	mkdir -p /etc/v2ray-agent/trojan
-	mkdir -p /etc/v2ray-agent/hysteria/conf
+	mkdir -p /etcv2rayagent/tls
+	mkdir -p /etcv2rayagent/subscribe
+	mkdir -p /etcv2rayagent/subscribe_tmp
+	mkdir -p /etcv2rayagent/v2ray/conf
+	mkdir -p /etcv2rayagent/v2ray/tmp
+	mkdir -p /etcv2rayagent/xray/conf
+	mkdir -p /etcv2rayagent/xray/tmp
+	mkdir -p /etcv2rayagent/trojan
+	mkdir -p /etcv2rayagent/hysteria/conf
 	mkdir -p /etc/systemd/system/
-	mkdir -p /tmp/v2ray-agent-tls/
+	mkdir -p /tmpv2rayagent-tls/
 }
 
 # 安装工具包
@@ -625,8 +625,8 @@ installTools() {
 
 	echoContent green " ---> 检查、安装更新【新机器会很慢，如长时间无反应，请手动停止后重新执行】"
 
-	${upgrade} >/etc/v2ray-agent/install.log 2>&1
-	if grep <"/etc/v2ray-agent/install.log" -q "changed"; then
+	${upgrade} >/etcv2rayagent/install.log 2>&1
+	if grep <"/etcv2rayagent/install.log" -q "changed"; then
 		${updateReleaseInfoChange} >/dev/null 2>&1
 	fi
 
@@ -755,11 +755,11 @@ installTools() {
 
 	if [[ ! -d "$HOME/.acme.sh" ]] || [[ -d "$HOME/.acme.sh" && -z $(find "$HOME/.acme.sh/acme.sh") ]]; then
 		echoContent green " ---> 安装acme.sh"
-		curl -s https://get.acme.sh | sh >/etc/v2ray-agent/tls/acme.log 2>&1
+		curl -s https://get.acme.sh | sh >/etcv2rayagent/tls/acme.log 2>&1
 
 		if [[ ! -d "$HOME/.acme.sh" ]] || [[ -z $(find "$HOME/.acme.sh/acme.sh") ]]; then
 			echoContent red "  acme安装失败--->"
-			tail -n 100 /etc/v2ray-agent/tls/acme.log
+			tail -n 100 /etcv2rayagent/tls/acme.log
 			echoContent yellow "错误排查:"
 			echoContent red "  1.获取Github文件失败，请等待Github恢复后尝试，恢复进度可查看 [https://www.githubstatus.com/]"
 			echoContent red "  2.acme.sh脚本出现bug，可查看[https://github.com/acmesh-official/acme.sh] issues"
@@ -951,7 +951,7 @@ server {
 
 	location /s/ {
     	add_header Content-Type text/plain;
-    	alias /etc/v2ray-agent/subscribe/;
+    	alias /etcv2rayagent/subscribe/;
     }
 
     location /${currentPath}grpc {
@@ -988,7 +988,7 @@ server {
 	root /usr/share/nginx/html;
 	location /s/ {
     		add_header Content-Type text/plain;
-    		alias /etc/v2ray-agent/subscribe/;
+    		alias /etcv2rayagent/subscribe/;
     }
 	location /${currentPath}grpc {
 		client_max_body_size 0;
@@ -1013,7 +1013,7 @@ server {
 	root /usr/share/nginx/html;
 	location /s/ {
     		add_header Content-Type text/plain;
-    		alias /etc/v2ray-agent/subscribe/;
+    		alias /etcv2rayagent/subscribe/;
     }
 	location /${currentPath}trojangrpc {
 		client_max_body_size 0;
@@ -1037,7 +1037,7 @@ server {
 	root /usr/share/nginx/html;
 	location /s/ {
     		add_header Content-Type text/plain;
-    		alias /etc/v2ray-agent/subscribe/;
+    		alias /etcv2rayagent/subscribe/;
     }
 	location / {
 	}
@@ -1052,7 +1052,7 @@ server {
 	root /usr/share/nginx/html;
 	location /s/ {
 		add_header Content-Type text/plain;
-		alias /etc/v2ray-agent/subscribe/;
+		alias /etcv2rayagent/subscribe/;
 	}
 	location / {
 		add_header Strict-Transport-Security "max-age=15552000; preload" always;
@@ -1166,8 +1166,8 @@ switchSSLType() {
 			sslType="letsencrypt"
 			;;
 		esac
-		touch /etc/v2ray-agent/tls
-		echo "${sslType}" >/etc/v2ray-agent/tls/ssl_type
+		touch /etcv2rayagent/tls
+		echo "${sslType}" >/etcv2rayagent/tls/ssl_type
 
 	fi
 }
@@ -1201,13 +1201,13 @@ selectAcmeInstallSSL() {
 acmeInstallSSL() {
 	if [[ "${dnsSSLStatus}" == "true" ]]; then
 
-		sudo "$HOME/.acme.sh/acme.sh" --issue -d "*.${dnsTLSDomain}" --dns --yes-I-know-dns-manual-mode-enough-go-ahead-please --standalone -k ec-256 --server "${sslType}" ${installSSLIPv6} 2>&1 | tee -a /etc/v2ray-agent/tls/acme.log >/dev/null
+		sudo "$HOME/.acme.sh/acme.sh" --issue -d "*.${dnsTLSDomain}" --dns --yes-I-know-dns-manual-mode-enough-go-ahead-please --standalone -k ec-256 --server "${sslType}" ${installSSLIPv6} 2>&1 | tee -a /etcv2rayagent/tls/acme.log >/dev/null
 
 		local txtValue=
-		txtValue=$(tail -n 10 /etc/v2ray-agent/tls/acme.log | grep "TXT value" | awk -F "'" '{print $2}')
+		txtValue=$(tail -n 10 /etcv2rayagent/tls/acme.log | grep "TXT value" | awk -F "'" '{print $2}')
 		if [[ -n "${txtValue}" ]]; then
 			echoContent green " ---> 请手动添加DNS TXT记录"
-			echoContent yellow " ---> 添加方法请参考此教程，https://github.com/mack-a/v2ray-agent/blob/master/documents/dns_txt.md"
+			echoContent yellow " ---> 添加方法请参考此教程，https://github.com/moneyfly1/v2rayagent/blob/master/documents/dns_txt.md"
 			echoContent green " --->  name：_acme-challenge"
 			echoContent green " --->  value：${txtValue}"
 			echoContent yellow " ---> 添加完成后等请等待1-2分钟"
@@ -1219,7 +1219,7 @@ acmeInstallSSL() {
 				if [[ "${txtAnswer}" == "${txtValue}" ]]; then
 					echoContent green " ---> TXT记录验证通过"
 					echoContent green " ---> 生成证书中"
-					sudo "$HOME/.acme.sh/acme.sh" --renew -d "*.${dnsTLSDomain}" --yes-I-know-dns-manual-mode-enough-go-ahead-please --ecc --server "${sslType}" ${installSSLIPv6} 2>&1 | tee -a /etc/v2ray-agent/tls/acme.log >/dev/null
+					sudo "$HOME/.acme.sh/acme.sh" --renew -d "*.${dnsTLSDomain}" --yes-I-know-dns-manual-mode-enough-go-ahead-please --ecc --server "${sslType}" ${installSSLIPv6} 2>&1 | tee -a /etcv2rayagent/tls/acme.log >/dev/null
 				else
 					echoContent red " ---> 验证失败，请等待1-2分钟后重新尝试"
 					acmeInstallSSL
@@ -1231,7 +1231,7 @@ acmeInstallSSL() {
 		fi
 	else
 		echoContent green " ---> 生成证书中"
-		sudo "$HOME/.acme.sh/acme.sh" --issue -d "${tlsDomain}" --standalone -k ec-256 --server "${sslType}" ${installSSLIPv6} 2>&1 | tee -a /etc/v2ray-agent/tls/acme.log >/dev/null
+		sudo "$HOME/.acme.sh/acme.sh" --issue -d "${tlsDomain}" --standalone -k ec-256 --server "${sslType}" ${installSSLIPv6} 2>&1 | tee -a /etcv2rayagent/tls/acme.log >/dev/null
 	fi
 }
 # 自定义端口
@@ -1277,18 +1277,18 @@ installTLS() {
 	local tlsDomain=${domain}
 
 	# 安装tls
-	if [[ -f "/etc/v2ray-agent/tls/${tlsDomain}.crt" && -f "/etc/v2ray-agent/tls/${tlsDomain}.key" && -n $(cat "/etc/v2ray-agent/tls/${tlsDomain}.crt") ]] || [[ -d "$HOME/.acme.sh/${tlsDomain}_ecc" && -f "$HOME/.acme.sh/${tlsDomain}_ecc/${tlsDomain}.key" && -f "$HOME/.acme.sh/${tlsDomain}_ecc/${tlsDomain}.cer" ]]; then
+	if [[ -f "/etcv2rayagent/tls/${tlsDomain}.crt" && -f "/etcv2rayagent/tls/${tlsDomain}.key" && -n $(cat "/etcv2rayagent/tls/${tlsDomain}.crt") ]] || [[ -d "$HOME/.acme.sh/${tlsDomain}_ecc" && -f "$HOME/.acme.sh/${tlsDomain}_ecc/${tlsDomain}.key" && -f "$HOME/.acme.sh/${tlsDomain}_ecc/${tlsDomain}.cer" ]]; then
 		echoContent green " ---> 检测到证书"
 		# checkTLStatus
 		renewalTLS
 
-		if [[ -z $(find /etc/v2ray-agent/tls/ -name "${tlsDomain}.crt") ]] || [[ -z $(find /etc/v2ray-agent/tls/ -name "${tlsDomain}.key") ]] || [[ -z $(cat "/etc/v2ray-agent/tls/${tlsDomain}.crt") ]]; then
-			sudo "$HOME/.acme.sh/acme.sh" --installcert -d "${tlsDomain}" --fullchainpath "/etc/v2ray-agent/tls/${tlsDomain}.crt" --keypath "/etc/v2ray-agent/tls/${tlsDomain}.key" --ecc >/dev/null
+		if [[ -z $(find /etcv2rayagent/tls/ -name "${tlsDomain}.crt") ]] || [[ -z $(find /etcv2rayagent/tls/ -name "${tlsDomain}.key") ]] || [[ -z $(cat "/etcv2rayagent/tls/${tlsDomain}.crt") ]]; then
+			sudo "$HOME/.acme.sh/acme.sh" --installcert -d "${tlsDomain}" --fullchainpath "/etcv2rayagent/tls/${tlsDomain}.crt" --keypath "/etcv2rayagent/tls/${tlsDomain}.key" --ecc >/dev/null
 		else
 			echoContent yellow " ---> 如未过期或者自定义证书请选择[n]\n"
 			read -r -p "是否重新安装？[y/n]:" reInstallStatus
 			if [[ "${reInstallStatus}" == "y" ]]; then
-				rm -rf /etc/v2ray-agent/tls/*
+				rm -rf /etcv2rayagent/tls/*
 				installTLS "$1"
 			fi
 		fi
@@ -1307,15 +1307,15 @@ installTLS() {
 		if [[ "${installDNSACMEStatus}" == "true" ]]; then
 			echo
 			if [[ -d "$HOME/.acme.sh/*.${dnsTLSDomain}_ecc" && -f "$HOME/.acme.sh/*.${dnsTLSDomain}_ecc/*.${dnsTLSDomain}.key" && -f "$HOME/.acme.sh/*.${dnsTLSDomain}_ecc/*.${dnsTLSDomain}.cer" ]]; then
-				sudo "$HOME/.acme.sh/acme.sh" --installcert -d "*.${dnsTLSDomain}" --fullchainpath "/etc/v2ray-agent/tls/${tlsDomain}.crt" --keypath "/etc/v2ray-agent/tls/${tlsDomain}.key" --ecc >/dev/null
+				sudo "$HOME/.acme.sh/acme.sh" --installcert -d "*.${dnsTLSDomain}" --fullchainpath "/etcv2rayagent/tls/${tlsDomain}.crt" --keypath "/etcv2rayagent/tls/${tlsDomain}.key" --ecc >/dev/null
 			fi
 
 		elif [[ -d "$HOME/.acme.sh/${tlsDomain}_ecc" && -f "$HOME/.acme.sh/${tlsDomain}_ecc/${tlsDomain}.key" && -f "$HOME/.acme.sh/${tlsDomain}_ecc/${tlsDomain}.cer" ]]; then
-			sudo "$HOME/.acme.sh/acme.sh" --installcert -d "${tlsDomain}" --fullchainpath "/etc/v2ray-agent/tls/${tlsDomain}.crt" --keypath "/etc/v2ray-agent/tls/${tlsDomain}.key" --ecc >/dev/null
+			sudo "$HOME/.acme.sh/acme.sh" --installcert -d "${tlsDomain}" --fullchainpath "/etcv2rayagent/tls/${tlsDomain}.crt" --keypath "/etcv2rayagent/tls/${tlsDomain}.key" --ecc >/dev/null
 		fi
 
-		if [[ ! -f "/etc/v2ray-agent/tls/${tlsDomain}.crt" || ! -f "/etc/v2ray-agent/tls/${tlsDomain}.key" ]] || [[ -z $(cat "/etc/v2ray-agent/tls/${tlsDomain}.key") || -z $(cat "/etc/v2ray-agent/tls/${tlsDomain}.crt") ]]; then
-			tail -n 10 /etc/v2ray-agent/tls/acme.log
+		if [[ ! -f "/etcv2rayagent/tls/${tlsDomain}.crt" || ! -f "/etcv2rayagent/tls/${tlsDomain}.key" ]] || [[ -z $(cat "/etcv2rayagent/tls/${tlsDomain}.key") || -z $(cat "/etcv2rayagent/tls/${tlsDomain}.crt") ]]; then
+			tail -n 10 /etcv2rayagent/tls/acme.log
 			if [[ ${installTLSCount} == "1" ]]; then
 				echoContent red " ---> TLS安装失败，请检查acme日志"
 				exit 0
@@ -1328,7 +1328,7 @@ installTLS() {
 			allowPort 443
 			echoContent yellow " ---> 重新尝试安装TLS证书"
 
-			if tail -n 10 /etc/v2ray-agent/tls/acme.log | grep -q "Could not validate email address as valid"; then
+			if tail -n 10 /etcv2rayagent/tls/acme.log | grep -q "Could not validate email address as valid"; then
 				echoContent red " ---> 邮箱无法通过SSL厂商验证，请重新输入"
 				echo
 				customSSLEmail "validate email"
@@ -1399,7 +1399,7 @@ nginxBlog() {
 		if [[ "${nginxBlogInstallStatus}" == "y" ]]; then
 			rm -rf /usr/share/nginx/html
 			randomNum=$((RANDOM % 6 + 1))
-			wget -q -P /usr/share/nginx https://raw.githubusercontent.com/mack-a/v2ray-agent/master/fodder/blog/unable/html${randomNum}.zip >/dev/null
+			wget -q -P /usr/share/nginx https://raw.githubusercontent.com/moneyfly1/v2rayagent/master/fodder/blog/unable/html${randomNum}.zip >/dev/null
 			unzip -o /usr/share/nginx/html${randomNum}.zip -d /usr/share/nginx/html >/dev/null
 			rm -f /usr/share/nginx/html${randomNum}.zip*
 			echoContent green " ---> 添加伪装站点成功"
@@ -1407,7 +1407,7 @@ nginxBlog() {
 	else
 		randomNum=$((RANDOM % 6 + 1))
 		rm -rf /usr/share/nginx/html
-		wget -q -P /usr/share/nginx https://raw.githubusercontent.com/mack-a/v2ray-agent/master/fodder/blog/unable/html${randomNum}.zip >/dev/null
+		wget -q -P /usr/share/nginx https://raw.githubusercontent.com/moneyfly1/v2rayagent/master/fodder/blog/unable/html${randomNum}.zip >/dev/null
 		unzip -o /usr/share/nginx/html${randomNum}.zip -d /usr/share/nginx/html >/dev/null
 		rm -f /usr/share/nginx/html${randomNum}.zip*
 		echoContent green " ---> 添加伪装站点成功"
@@ -1418,9 +1418,9 @@ nginxBlog() {
 # 修改http_port_t端口
 updateSELinuxHTTPPortT() {
 
-	$(find /usr/bin /usr/sbin | grep -w journalctl) -xe >/etc/v2ray-agent/nginx_error.log 2>&1
+	$(find /usr/bin /usr/sbin | grep -w journalctl) -xe >/etcv2rayagent/nginx_error.log 2>&1
 
-	if find /usr/bin /usr/sbin | grep -q -w semanage && find /usr/bin /usr/sbin | grep -q -w getenforce && grep -E "31300|31302" </etc/v2ray-agent/nginx_error.log | grep -q "Permission denied"; then
+	if find /usr/bin /usr/sbin | grep -q -w semanage && find /usr/bin /usr/sbin | grep -q -w getenforce && grep -E "31300|31302" </etcv2rayagent/nginx_error.log | grep -q "Permission denied"; then
 		echoContent red " ---> 检查SELinux端口是否开放"
 		if ! $(find /usr/bin /usr/sbin | grep -w semanage) port -l | grep http_port | grep -q 31300; then
 			$(find /usr/bin /usr/sbin | grep -w semanage) port -a -t http_port_t -p tcp 31300
@@ -1442,7 +1442,7 @@ updateSELinuxHTTPPortT() {
 handleNginx() {
 
 	if [[ -z $(pgrep -f "nginx") ]] && [[ "$1" == "start" ]]; then
-		systemctl start nginx 2>/etc/v2ray-agent/nginx_error.log
+		systemctl start nginx 2>/etcv2rayagent/nginx_error.log
 
 		sleep 0.5
 
@@ -1450,7 +1450,7 @@ handleNginx() {
 			echoContent red " ---> Nginx启动失败"
 			echoContent red " ---> 请手动尝试安装nginx后，再次执行脚本"
 
-			if grep -q "journalctl -xe" </etc/v2ray-agent/nginx_error.log; then
+			if grep -q "journalctl -xe" </etcv2rayagent/nginx_error.log; then
 				updateSELinuxHTTPPortT
 			fi
 
@@ -1472,12 +1472,12 @@ handleNginx() {
 # 定时任务更新tls证书
 installCronTLS() {
 	echoContent skyBlue "\n进度 $1/${totalProgress} : 添加定时维护证书"
-	crontab -l >/etc/v2ray-agent/backup_crontab.cron
+	crontab -l >/etcv2rayagent/backup_crontab.cron
 	local historyCrontab
-	historyCrontab=$(sed '/v2ray-agent/d;/acme.sh/d' /etc/v2ray-agent/backup_crontab.cron)
-	echo "${historyCrontab}" >/etc/v2ray-agent/backup_crontab.cron
-	echo "30 1 * * * /bin/bash /etc/v2ray-agent/install.sh RenewTLS >> /etc/v2ray-agent/crontab_tls.log 2>&1" >>/etc/v2ray-agent/backup_crontab.cron
-	crontab /etc/v2ray-agent/backup_crontab.cron
+	historyCrontab=$(sed 'v2rayagent/d;/acme.sh/d' /etcv2rayagent/backup_crontab.cron)
+	echo "${historyCrontab}" >/etcv2rayagent/backup_crontab.cron
+	echo "30 1 * * * /bin/bash /etcv2rayagent/install.sh RenewTLS >> /etcv2rayagent/crontab_tls.log 2>&1" >>/etcv2rayagent/backup_crontab.cron
+	crontab /etcv2rayagent/backup_crontab.cron
 	echoContent green "\n ---> 添加定时维护证书成功"
 }
 
@@ -1493,8 +1493,8 @@ renewalTLS() {
 		domain=${tlsDomain}
 	fi
 
-	if [[ -f "/etc/v2ray-agent/tls/ssl_type" ]]; then
-		if grep -q "buypass" <"/etc/v2ray-agent/tls/ssl_type"; then
+	if [[ -f "/etcv2rayagent/tls/ssl_type" ]]; then
+		if grep -q "buypass" <"/etcv2rayagent/tls/ssl_type"; then
 			sslRenewalDays=180
 		fi
 	fi
@@ -1528,7 +1528,7 @@ renewalTLS() {
 			echoContent yellow " ---> 重新生成证书"
 			handleNginx stop
 			sudo "$HOME/.acme.sh/acme.sh" --cron --home "$HOME/.acme.sh"
-			sudo "$HOME/.acme.sh/acme.sh" --installcert -d "${domain}" --fullchainpath /etc/v2ray-agent/tls/"${domain}.crt" --keypath /etc/v2ray-agent/tls/"${domain}.key" --ecc
+			sudo "$HOME/.acme.sh/acme.sh" --installcert -d "${domain}" --fullchainpath /etcv2rayagent/tls/"${domain}.crt" --keypath /etcv2rayagent/tls/"${domain}.key" --ecc
 			reloadCore
 			handleNginx start
 		else
@@ -1576,25 +1576,25 @@ installV2Ray() {
 
 		echoContent green " ---> v2ray-core版本:${version}"
 		if wget --help | grep -q show-progress; then
-			wget -c -q --show-progress -P /etc/v2ray-agent/v2ray/ "https://github.com/v2fly/v2ray-core/releases/download/${version}/${v2rayCoreCPUVendor}.zip"
+			wget -c -q --show-progress -P /etcv2rayagent/v2ray/ "https://github.com/v2fly/v2ray-core/releases/download/${version}/${v2rayCoreCPUVendor}.zip"
 		else
-			wget -c -P /etc/v2ray-agent/v2ray/ "https://github.com/v2fly/v2ray-core/releases/download/${version}/${v2rayCoreCPUVendor}.zip" >/dev/null 2>&1
+			wget -c -P /etcv2rayagent/v2ray/ "https://github.com/v2fly/v2ray-core/releases/download/${version}/${v2rayCoreCPUVendor}.zip" >/dev/null 2>&1
 		fi
 
-		unzip -o "/etc/v2ray-agent/v2ray/${v2rayCoreCPUVendor}.zip" -d /etc/v2ray-agent/v2ray >/dev/null
-		rm -rf "/etc/v2ray-agent/v2ray/${v2rayCoreCPUVendor}.zip"
+		unzip -o "/etcv2rayagent/v2ray/${v2rayCoreCPUVendor}.zip" -d /etcv2rayagent/v2ray >/dev/null
+		rm -rf "/etcv2rayagent/v2ray/${v2rayCoreCPUVendor}.zip"
 	else
 		if [[ "${selectCoreType}" == "3" ]]; then
 			echoContent green " ---> 锁定v2ray-core版本为v4.32.1"
-			rm -f /etc/v2ray-agent/v2ray/v2ray
-			rm -f /etc/v2ray-agent/v2ray/v2ctl
+			rm -f /etcv2rayagent/v2ray/v2ray
+			rm -f /etcv2rayagent/v2ray/v2ctl
 			installV2Ray "$1"
 		else
-			echoContent green " ---> v2ray-core版本:$(/etc/v2ray-agent/v2ray/v2ray --version | awk '{print $2}' | head -1)"
+			echoContent green " ---> v2ray-core版本:$(/etcv2rayagent/v2ray/v2ray --version | awk '{print $2}' | head -1)"
 			read -r -p "是否更新、升级？[y/n]:" reInstallV2RayStatus
 			if [[ "${reInstallV2RayStatus}" == "y" ]]; then
-				rm -f /etc/v2ray-agent/v2ray/v2ray
-				rm -f /etc/v2ray-agent/v2ray/v2ctl
+				rm -f /etcv2rayagent/v2ray/v2ray
+				rm -f /etcv2rayagent/v2ray/v2ctl
 				installV2Ray "$1"
 			fi
 		fi
@@ -1612,17 +1612,17 @@ installHysteria() {
 
 		echoContent green " ---> Hysteria版本:${version}"
 		if wget --help | grep -q show-progress; then
-			wget -c -q --show-progress -P /etc/v2ray-agent/hysteria/ "https://github.com/HyNetwork/hysteria/releases/download/${version}/${hysteriaCoreCPUVendor}"
+			wget -c -q --show-progress -P /etcv2rayagent/hysteria/ "https://github.com/HyNetwork/hysteria/releases/download/${version}/${hysteriaCoreCPUVendor}"
 		else
-			wget -c -P /etc/v2ray-agent/hysteria/ "https://github.com/HyNetwork/hysteria/releases/download/${version}/${hysteriaCoreCPUVendor}" >/dev/null 2>&1
+			wget -c -P /etcv2rayagent/hysteria/ "https://github.com/HyNetwork/hysteria/releases/download/${version}/${hysteriaCoreCPUVendor}" >/dev/null 2>&1
 		fi
-		mv "/etc/v2ray-agent/hysteria/${hysteriaCoreCPUVendor}" /etc/v2ray-agent/hysteria/hysteria
-		chmod 655 /etc/v2ray-agent/hysteria/hysteria
+		mv "/etcv2rayagent/hysteria/${hysteriaCoreCPUVendor}" /etcv2rayagent/hysteria/hysteria
+		chmod 655 /etcv2rayagent/hysteria/hysteria
 	else
-		echoContent green " ---> Hysteria版本:$(/etc/v2ray-agent/hysteria/hysteria --version | awk '{print $3}')"
+		echoContent green " ---> Hysteria版本:$(/etcv2rayagent/hysteria/hysteria --version | awk '{print $3}')"
 		read -r -p "是否更新、升级？[y/n]:" reInstallHysteriaStatus
 		if [[ "${reInstallHysteriaStatus}" == "y" ]]; then
-			rm -f /etc/v2ray-agent/hysteria/hysteria
+			rm -f /etcv2rayagent/hysteria/hysteria
 			installHysteria "$1"
 		fi
 	fi
@@ -1639,19 +1639,19 @@ installXray() {
 
 		echoContent green " ---> Xray-core版本:${version}"
 		if wget --help | grep -q show-progress; then
-			wget -c -q --show-progress -P /etc/v2ray-agent/xray/ "https://github.com/XTLS/Xray-core/releases/download/${version}/${xrayCoreCPUVendor}.zip"
+			wget -c -q --show-progress -P /etcv2rayagent/xray/ "https://github.com/XTLS/Xray-core/releases/download/${version}/${xrayCoreCPUVendor}.zip"
 		else
-			wget -c -P /etc/v2ray-agent/xray/ "https://github.com/XTLS/Xray-core/releases/download/${version}/${xrayCoreCPUVendor}.zip" >/dev/null 2>&1
+			wget -c -P /etcv2rayagent/xray/ "https://github.com/XTLS/Xray-core/releases/download/${version}/${xrayCoreCPUVendor}.zip" >/dev/null 2>&1
 		fi
 
-		unzip -o "/etc/v2ray-agent/xray/${xrayCoreCPUVendor}.zip" -d /etc/v2ray-agent/xray >/dev/null
-		rm -rf "/etc/v2ray-agent/xray/${xrayCoreCPUVendor}.zip"
-		chmod 655 /etc/v2ray-agent/xray/xray
+		unzip -o "/etcv2rayagent/xray/${xrayCoreCPUVendor}.zip" -d /etcv2rayagent/xray >/dev/null
+		rm -rf "/etcv2rayagent/xray/${xrayCoreCPUVendor}.zip"
+		chmod 655 /etcv2rayagent/xray/xray
 	else
-		echoContent green " ---> Xray-core版本:$(/etc/v2ray-agent/xray/xray --version | awk '{print $2}' | head -1)"
+		echoContent green " ---> Xray-core版本:$(/etcv2rayagent/xray/xray --version | awk '{print $2}' | head -1)"
 		read -r -p "是否更新、升级？[y/n]:" reInstallXrayStatus
 		if [[ "${reInstallXrayStatus}" == "y" ]]; then
-			rm -f /etc/v2ray-agent/xray/xray
+			rm -f /etcv2rayagent/xray/xray
 			installXray "$1"
 		fi
 	fi
@@ -1660,7 +1660,7 @@ installXray() {
 # v2ray版本管理
 v2rayVersionManageMenu() {
 	echoContent skyBlue "\n进度  $1/${totalProgress} : V2Ray版本管理"
-	if [[ ! -d "/etc/v2ray-agent/v2ray/" ]]; then
+	if [[ ! -d "/etcv2rayagent/v2ray/" ]]; then
 		echoContent red " ---> 没有检测到安装目录，请执行脚本安装内容"
 		menu
 		exit 0
@@ -1703,7 +1703,7 @@ v2rayVersionManageMenu() {
 # xray版本管理
 xrayVersionManageMenu() {
 	echoContent skyBlue "\n进度  $1/${totalProgress} : Xray版本管理"
-	if [[ ! -d "/etc/v2ray-agent/xray/" ]]; then
+	if [[ ! -d "/etcv2rayagent/xray/" ]]; then
 		echoContent red " ---> 没有检测到安装目录，请执行脚本安装内容"
 		menu
 		exit 0
@@ -1765,17 +1765,17 @@ updateV2Ray() {
 		echoContent green " ---> v2ray-core版本:${version}"
 
 		if wget --help | grep -q show-progress; then
-			wget -c -q --show-progress -P /etc/v2ray-agent/v2ray/ "https://github.com/v2fly/v2ray-core/releases/download/${version}/${v2rayCoreCPUVendor}.zip"
+			wget -c -q --show-progress -P /etcv2rayagent/v2ray/ "https://github.com/v2fly/v2ray-core/releases/download/${version}/${v2rayCoreCPUVendor}.zip"
 		else
-			wget -c -P "/etc/v2ray-agent/v2ray/ https://github.com/v2fly/v2ray-core/releases/download/${version}/${v2rayCoreCPUVendor}.zip" >/dev/null 2>&1
+			wget -c -P "/etcv2rayagent/v2ray/ https://github.com/v2fly/v2ray-core/releases/download/${version}/${v2rayCoreCPUVendor}.zip" >/dev/null 2>&1
 		fi
 
-		unzip -o "/etc/v2ray-agent/v2ray/${v2rayCoreCPUVendor}.zip" -d /etc/v2ray-agent/v2ray >/dev/null
-		rm -rf "/etc/v2ray-agent/v2ray/${v2rayCoreCPUVendor}.zip"
+		unzip -o "/etcv2rayagent/v2ray/${v2rayCoreCPUVendor}.zip" -d /etcv2rayagent/v2ray >/dev/null
+		rm -rf "/etcv2rayagent/v2ray/${v2rayCoreCPUVendor}.zip"
 		handleV2Ray stop
 		handleV2Ray start
 	else
-		echoContent green " ---> 当前v2ray-core版本:$(/etc/v2ray-agent/v2ray/v2ray --version | awk '{print $2}' | head -1)"
+		echoContent green " ---> 当前v2ray-core版本:$(/etcv2rayagent/v2ray/v2ray --version | awk '{print $2}' | head -1)"
 
 		if [[ -n "$1" ]]; then
 			version=$1
@@ -1790,24 +1790,24 @@ updateV2Ray() {
 			read -r -p "回退版本为${version}，是否继续？[y/n]:" rollbackV2RayStatus
 			if [[ "${rollbackV2RayStatus}" == "y" ]]; then
 				if [[ "${coreInstallType}" == "2" || "${coreInstallType}" == "3" ]]; then
-					echoContent green " ---> 当前v2ray-core版本:$(/etc/v2ray-agent/v2ray/v2ray --version | awk '{print $2}' | head -1)"
+					echoContent green " ---> 当前v2ray-core版本:$(/etcv2rayagent/v2ray/v2ray --version | awk '{print $2}' | head -1)"
 				elif [[ "${coreInstallType}" == "1" ]]; then
-					echoContent green " ---> 当前Xray-core版本:$(/etc/v2ray-agent/xray/xray --version | awk '{print $2}' | head -1)"
+					echoContent green " ---> 当前Xray-core版本:$(/etcv2rayagent/xray/xray --version | awk '{print $2}' | head -1)"
 				fi
 
 				handleV2Ray stop
-				rm -f /etc/v2ray-agent/v2ray/v2ray
-				rm -f /etc/v2ray-agent/v2ray/v2ctl
+				rm -f /etcv2rayagent/v2ray/v2ray
+				rm -f /etcv2rayagent/v2ray/v2ctl
 				updateV2Ray "${version}"
 			else
 				echoContent green " ---> 放弃回退版本"
 			fi
-		elif [[ "${version}" == "v$(/etc/v2ray-agent/v2ray/v2ray --version | awk '{print $2}' | head -1)" ]]; then
+		elif [[ "${version}" == "v$(/etcv2rayagent/v2ray/v2ray --version | awk '{print $2}' | head -1)" ]]; then
 			read -r -p "当前版本与最新版相同，是否重新安装？[y/n]:" reInstallV2RayStatus
 			if [[ "${reInstallV2RayStatus}" == "y" ]]; then
 				handleV2Ray stop
-				rm -f /etc/v2ray-agent/v2ray/v2ray
-				rm -f /etc/v2ray-agent/v2ray/v2ctl
+				rm -f /etcv2rayagent/v2ray/v2ray
+				rm -f /etcv2rayagent/v2ray/v2ctl
 				updateV2Ray
 			else
 				echoContent green " ---> 放弃重新安装"
@@ -1815,8 +1815,8 @@ updateV2Ray() {
 		else
 			read -r -p "最新版本为:${version}，是否更新？[y/n]:" installV2RayStatus
 			if [[ "${installV2RayStatus}" == "y" ]]; then
-				rm -f /etc/v2ray-agent/v2ray/v2ray
-				rm -f /etc/v2ray-agent/v2ray/v2ctl
+				rm -f /etcv2rayagent/v2ray/v2ray
+				rm -f /etcv2rayagent/v2ray/v2ctl
 				updateV2Ray
 			else
 				echoContent green " ---> 放弃更新"
@@ -1839,18 +1839,18 @@ updateXray() {
 		echoContent green " ---> Xray-core版本:${version}"
 
 		if wget --help | grep -q show-progress; then
-			wget -c -q --show-progress -P /etc/v2ray-agent/xray/ "https://github.com/XTLS/Xray-core/releases/download/${version}/${xrayCoreCPUVendor}.zip"
+			wget -c -q --show-progress -P /etcv2rayagent/xray/ "https://github.com/XTLS/Xray-core/releases/download/${version}/${xrayCoreCPUVendor}.zip"
 		else
-			wget -c -P /etc/v2ray-agent/xray/ "https://github.com/XTLS/Xray-core/releases/download/${version}/${xrayCoreCPUVendor}.zip" >/dev/null 2>&1
+			wget -c -P /etcv2rayagent/xray/ "https://github.com/XTLS/Xray-core/releases/download/${version}/${xrayCoreCPUVendor}.zip" >/dev/null 2>&1
 		fi
 
-		unzip -o "/etc/v2ray-agent/xray/${xrayCoreCPUVendor}.zip" -d /etc/v2ray-agent/xray >/dev/null
-		rm -rf "/etc/v2ray-agent/xray/${xrayCoreCPUVendor}.zip"
-		chmod 655 /etc/v2ray-agent/xray/xray
+		unzip -o "/etcv2rayagent/xray/${xrayCoreCPUVendor}.zip" -d /etcv2rayagent/xray >/dev/null
+		rm -rf "/etcv2rayagent/xray/${xrayCoreCPUVendor}.zip"
+		chmod 655 /etcv2rayagent/xray/xray
 		handleXray stop
 		handleXray start
 	else
-		echoContent green " ---> 当前Xray-core版本:$(/etc/v2ray-agent/xray/xray --version | awk '{print $2}' | head -1)"
+		echoContent green " ---> 当前Xray-core版本:$(/etcv2rayagent/xray/xray --version | awk '{print $2}' | head -1)"
 
 		if [[ -n "$1" ]]; then
 			version=$1
@@ -1861,20 +1861,20 @@ updateXray() {
 		if [[ -n "$1" ]]; then
 			read -r -p "回退版本为${version}，是否继续？[y/n]:" rollbackXrayStatus
 			if [[ "${rollbackXrayStatus}" == "y" ]]; then
-				echoContent green " ---> 当前Xray-core版本:$(/etc/v2ray-agent/xray/xray --version | awk '{print $2}' | head -1)"
+				echoContent green " ---> 当前Xray-core版本:$(/etcv2rayagent/xray/xray --version | awk '{print $2}' | head -1)"
 
 				handleXray stop
-				rm -f /etc/v2ray-agent/xray/xray
+				rm -f /etcv2rayagent/xray/xray
 				updateXray "${version}"
 			else
 				echoContent green " ---> 放弃回退版本"
 			fi
-		elif [[ "${version}" == "v$(/etc/v2ray-agent/xray/xray --version | awk '{print $2}' | head -1)" ]]; then
+		elif [[ "${version}" == "v$(/etcv2rayagent/xray/xray --version | awk '{print $2}' | head -1)" ]]; then
 			read -r -p "当前版本与最新版相同，是否重新安装？[y/n]:" reInstallXrayStatus
 			if [[ "${reInstallXrayStatus}" == "y" ]]; then
 				handleXray stop
-				rm -f /etc/v2ray-agent/xray/xray
-				rm -f /etc/v2ray-agent/xray/xray
+				rm -f /etcv2rayagent/xray/xray
+				rm -f /etcv2rayagent/xray/xray
 				updateXray
 			else
 				echoContent green " ---> 放弃重新安装"
@@ -1882,7 +1882,7 @@ updateXray() {
 		else
 			read -r -p "最新版本为:${version}，是否更新？[y/n]:" installXrayStatus
 			if [[ "${installXrayStatus}" == "y" ]]; then
-				rm -f /etc/v2ray-agent/xray/xray
+				rm -f /etcv2rayagent/xray/xray
 				updateXray
 			else
 				echoContent green " ---> 放弃更新"
@@ -1913,7 +1913,7 @@ installV2RayService() {
 	if [[ -n $(find /bin /usr/bin -name "systemctl") ]]; then
 		rm -rf /etc/systemd/system/v2ray.service
 		touch /etc/systemd/system/v2ray.service
-		execStart='/etc/v2ray-agent/v2ray/v2ray -confdir /etc/v2ray-agent/v2ray/conf'
+		execStart='/etcv2rayagent/v2ray/v2ray -confdir /etcv2rayagent/v2ray/conf'
 		cat <<EOF >/etc/systemd/system/v2ray.service
 [Unit]
 Description=V2Ray - A unified platform for anti-censorship
@@ -1947,7 +1947,7 @@ installHysteriaService() {
 	if [[ -n $(find /bin /usr/bin -name "systemctl") ]]; then
 		rm -rf /etc/systemd/system/hysteria.service
 		touch /etc/systemd/system/hysteria.service
-		execStart='/etc/v2ray-agent/hysteria/hysteria --log-level info -c /etc/v2ray-agent/hysteria/conf/config.json server'
+		execStart='/etcv2rayagent/hysteria/hysteria --log-level info -c /etcv2rayagent/hysteria/conf/config.json server'
 		cat <<EOF >/etc/systemd/system/hysteria.service
     [Unit]
     Description=Hysteria Service
@@ -1980,7 +1980,7 @@ installXrayService() {
 	if [[ -n $(find /bin /usr/bin -name "systemctl") ]]; then
 		rm -rf /etc/systemd/system/xray.service
 		touch /etc/systemd/system/xray.service
-		execStart='/etc/v2ray-agent/xray/xray run -confdir /etc/v2ray-agent/xray/conf'
+		execStart='/etcv2rayagent/xray/xray run -confdir /etcv2rayagent/xray/conf'
 		cat <<EOF >/etc/systemd/system/xray.service
 [Unit]
 Description=Xray Service
@@ -2025,7 +2025,7 @@ handleV2Ray() {
 			echoContent green " ---> V2Ray启动成功"
 		else
 			echoContent red "V2Ray启动失败"
-			echoContent red "请手动执行【/etc/v2ray-agent/v2ray/v2ray -confdir /etc/v2ray-agent/v2ray/conf】，查看错误日志"
+			echoContent red "请手动执行【/etcv2rayagent/v2ray/v2ray -confdir /etcv2rayagent/v2ray/conf】，查看错误日志"
 			exit 0
 		fi
 	elif [[ "$1" == "stop" ]]; then
@@ -2056,7 +2056,7 @@ handleHysteria() {
 			echoContent green " ---> Hysteria启动成功"
 		else
 			echoContent red "Hysteria启动失败"
-			echoContent red "请手动执行【/etc/v2ray-agent/hysteria/hysteria --log-level debug -c /etc/v2ray-agent/hysteria/conf/config.json server】，查看错误日志"
+			echoContent red "请手动执行【/etcv2rayagent/hysteria/hysteria --log-level debug -c /etcv2rayagent/hysteria/conf/config.json server】，查看错误日志"
 			exit 0
 		fi
 	elif [[ "$1" == "stop" ]]; then
@@ -2086,7 +2086,7 @@ handleXray() {
 			echoContent green " ---> Xray启动成功"
 		else
 			echoContent red "Xray启动失败"
-			echoContent red "请手动执行【/etc/v2ray-agent/xray/xray -confdir /etc/v2ray-agent/xray/conf】，查看错误日志"
+			echoContent red "请手动执行【/etcv2rayagent/xray/xray -confdir /etcv2rayagent/xray/conf】，查看错误日志"
 			exit 0
 		fi
 	elif [[ "$1" == "stop" ]]; then
@@ -2216,7 +2216,7 @@ initHysteriaNetwork() {
 		echoContent yellow "\n ---> 上行速度: ${hysteriaClientUploadSpeed}\n"
 	fi
 
-	cat <<EOF >/etc/v2ray-agent/hysteria/conf/client_network.json
+	cat <<EOF >/etcv2rayagent/hysteria/conf/client_network.json
 {
 	"hysteriaLag":"${hysteriaLag}",
 	"hysteriaClientUploadSpeed":"${hysteriaClientUploadSpeed}",
@@ -2234,13 +2234,13 @@ initHysteriaConfig() {
 	initHysteriaNetwork
 
 	getClients "${configPath}/02_VLESS_TCP_inbounds.json" true
-	cat <<EOF >/etc/v2ray-agent/hysteria/conf/config.json
+	cat <<EOF >/etcv2rayagent/hysteria/conf/config.json
 {
 	"listen": ":${hysteriaPort}",
 	"protocol": "${hysteriaProtocol}",
 	"disable_udp": false,
-	"cert": "/etc/v2ray-agent/tls/${currentHost}.crt",
-	"key": "/etc/v2ray-agent/tls/${currentHost}.key",
+	"cert": "/etcv2rayagent/tls/${currentHost}.crt",
+	"key": "/etcv2rayagent/tls/${currentHost}.key",
 	"auth": {
 		"mode": "passwords",
 		"config": []
@@ -2257,7 +2257,7 @@ initHysteriaConfig() {
 }
 EOF
 
-	addClientsHysteria "/etc/v2ray-agent/hysteria/conf/config.json" true
+	addClientsHysteria "/etcv2rayagent/hysteria/conf/config.json" true
 }
 
 # 初始化V2Ray 配置文件
@@ -2280,31 +2280,31 @@ initV2RayConfig() {
 			uuid=${currentUUID}
 			addClientsStatus=true
 		else
-			uuid=$(/etc/v2ray-agent/v2ray/v2ctl uuid)
+			uuid=$(/etcv2rayagent/v2ray/v2ctl uuid)
 		fi
 	elif [[ -z "${uuid}" ]]; then
-		uuid=$(/etc/v2ray-agent/v2ray/v2ctl uuid)
+		uuid=$(/etcv2rayagent/v2ray/v2ctl uuid)
 	fi
 
 	if [[ -z "${uuid}" ]]; then
 		addClientsStatus=
 		echoContent red "\n ---> uuid读取错误，重新生成"
-		uuid=$(/etc/v2ray-agent/v2ray/v2ctl uuid)
+		uuid=$(/etcv2rayagent/v2ray/v2ctl uuid)
 	fi
 
 	movePreviousConfig
 	# log
-	cat <<EOF >/etc/v2ray-agent/v2ray/conf/00_log.json
+	cat <<EOF >/etcv2rayagent/v2ray/conf/00_log.json
 {
   "log": {
-    "error": "/etc/v2ray-agent/v2ray/error.log",
+    "error": "/etcv2rayagent/v2ray/error.log",
     "loglevel": "warning"
   }
 }
 EOF
 	# outbounds
 	if [[ -n "${pingIPv6}" ]]; then
-		cat <<EOF >/etc/v2ray-agent/v2ray/conf/10_ipv6_outbounds.json
+		cat <<EOF >/etcv2rayagent/v2ray/conf/10_ipv6_outbounds.json
 {
     "outbounds": [
         {
@@ -2317,7 +2317,7 @@ EOF
 EOF
 
 	else
-		cat <<EOF >/etc/v2ray-agent/v2ray/conf/10_ipv4_outbounds.json
+		cat <<EOF >/etcv2rayagent/v2ray/conf/10_ipv4_outbounds.json
 {
     "outbounds":[
         {
@@ -2344,7 +2344,7 @@ EOF
 	fi
 
 	# dns
-	cat <<EOF >/etc/v2ray-agent/v2ray/conf/11_dns.json
+	cat <<EOF >/etcv2rayagent/v2ray/conf/11_dns.json
 {
     "dns": {
         "servers": [
@@ -2364,7 +2364,7 @@ EOF
 		fallbacksList='{"dest":31296,"xver":1},{"alpn":"h2","dest":31302,"xver":0}'
 
 		getClients "${configPath}../tmp/04_trojan_TCP_inbounds.json" "${addClientsStatus}"
-		cat <<EOF >/etc/v2ray-agent/v2ray/conf/04_trojan_TCP_inbounds.json
+		cat <<EOF >/etcv2rayagent/v2ray/conf/04_trojan_TCP_inbounds.json
 {
 "inbounds":[
 	{
@@ -2394,14 +2394,14 @@ EOF
 	]
 }
 EOF
-		addClients "/etc/v2ray-agent/v2ray/conf/04_trojan_TCP_inbounds.json" "${addClientsStatus}"
+		addClients "/etcv2rayagent/v2ray/conf/04_trojan_TCP_inbounds.json" "${addClientsStatus}"
 	fi
 
 	# VLESS_WS_TLS
 	if echo "${selectCustomInstallType}" | grep -q 1 || [[ "$1" == "all" ]]; then
 		fallbacksList=${fallbacksList}',{"path":"/'${customPath}'ws","dest":31297,"xver":1}'
 		getClients "${configPath}../tmp/03_VLESS_WS_inbounds.json" "${addClientsStatus}"
-		cat <<EOF >/etc/v2ray-agent/v2ray/conf/03_VLESS_WS_inbounds.json
+		cat <<EOF >/etcv2rayagent/v2ray/conf/03_VLESS_WS_inbounds.json
 {
 "inbounds":[
     {
@@ -2430,7 +2430,7 @@ EOF
 ]
 }
 EOF
-		addClients "/etc/v2ray-agent/v2ray/conf/03_VLESS_WS_inbounds.json" "${addClientsStatus}"
+		addClients "/etcv2rayagent/v2ray/conf/03_VLESS_WS_inbounds.json" "${addClientsStatus}"
 	fi
 
 	# trojan_grpc
@@ -2439,7 +2439,7 @@ EOF
 			fallbacksList=${fallbacksList//31302/31304}
 		fi
 		getClients "${configPath}../tmp/04_trojan_gRPC_inbounds.json" "${addClientsStatus}"
-		cat <<EOF >/etc/v2ray-agent/v2ray/conf/04_trojan_gRPC_inbounds.json
+		cat <<EOF >/etcv2rayagent/v2ray/conf/04_trojan_gRPC_inbounds.json
 {
     "inbounds": [
         {
@@ -2470,7 +2470,7 @@ EOF
     ]
 }
 EOF
-		addClients "/etc/v2ray-agent/v2ray/conf/04_trojan_gRPC_inbounds.json" "${addClientsStatus}"
+		addClients "/etcv2rayagent/v2ray/conf/04_trojan_gRPC_inbounds.json" "${addClientsStatus}"
 	fi
 
 	# VMess_WS
@@ -2479,7 +2479,7 @@ EOF
 
 		getClients "${configPath}../tmp/05_VMess_WS_inbounds.json" "${addClientsStatus}"
 
-		cat <<EOF >/etc/v2ray-agent/v2ray/conf/05_VMess_WS_inbounds.json
+		cat <<EOF >/etcv2rayagent/v2ray/conf/05_VMess_WS_inbounds.json
 {
 "inbounds":[
 {
@@ -2509,12 +2509,12 @@ EOF
 ]
 }
 EOF
-		addClients "/etc/v2ray-agent/v2ray/conf/05_VMess_WS_inbounds.json" "${addClientsStatus}"
+		addClients "/etcv2rayagent/v2ray/conf/05_VMess_WS_inbounds.json" "${addClientsStatus}"
 	fi
 
 	if echo "${selectCustomInstallType}" | grep -q 5 || [[ "$1" == "all" ]]; then
 		getClients "${configPath}../tmp/06_VLESS_gRPC_inbounds.json" "${addClientsStatus}"
-		cat <<EOF >/etc/v2ray-agent/v2ray/conf/06_VLESS_gRPC_inbounds.json
+		cat <<EOF >/etcv2rayagent/v2ray/conf/06_VLESS_gRPC_inbounds.json
 {
     "inbounds":[
     {
@@ -2542,7 +2542,7 @@ EOF
 ]
 }
 EOF
-		addClients "/etc/v2ray-agent/v2ray/conf/06_VLESS_gRPC_inbounds.json" "${addClientsStatus}"
+		addClients "/etcv2rayagent/v2ray/conf/06_VLESS_gRPC_inbounds.json" "${addClientsStatus}"
 	fi
 
 	# VLESS_TCP
@@ -2552,7 +2552,7 @@ EOF
 		defaultPort=${customPort}
 	fi
 
-	cat <<EOF >/etc/v2ray-agent/v2ray/conf/02_VLESS_TCP_inbounds.json
+	cat <<EOF >/etcv2rayagent/v2ray/conf/02_VLESS_TCP_inbounds.json
 {
 "inbounds":[
 {
@@ -2583,8 +2583,8 @@ EOF
       ],
       "certificates": [
         {
-          "certificateFile": "/etc/v2ray-agent/tls/${domain}.crt",
-          "keyFile": "/etc/v2ray-agent/tls/${domain}.key",
+          "certificateFile": "/etcv2rayagent/tls/${domain}.crt",
+          "keyFile": "/etcv2rayagent/tls/${domain}.key",
           "ocspStapling": 3600,
           "usage":"encipherment"
         }
@@ -2595,7 +2595,7 @@ EOF
 ]
 }
 EOF
-	addClients "/etc/v2ray-agent/v2ray/conf/02_VLESS_TCP_inbounds.json" "${addClientsStatus}"
+	addClients "/etcv2rayagent/v2ray/conf/02_VLESS_TCP_inbounds.json" "${addClientsStatus}"
 
 }
 
@@ -2691,7 +2691,7 @@ initXrayConfig() {
 		if [[ -n ${customUUID} ]]; then
 			uuid=${customUUID}
 		else
-			uuid=$(/etc/v2ray-agent/xray/xray uuid)
+			uuid=$(/etcv2rayagent/xray/xray uuid)
 		fi
 
 	fi
@@ -2699,7 +2699,7 @@ initXrayConfig() {
 	if [[ -z "${uuid}" ]]; then
 		addClientsStatus=
 		echoContent red "\n ---> uuid读取错误，重新生成"
-		uuid=$(/etc/v2ray-agent/xray/xray uuid)
+		uuid=$(/etcv2rayagent/xray/xray uuid)
 	fi
 
 	echoContent yellow "\n ${uuid}"
@@ -2707,10 +2707,10 @@ initXrayConfig() {
 	movePreviousConfig
 
 	# log
-	cat <<EOF >/etc/v2ray-agent/xray/conf/00_log.json
+	cat <<EOF >/etcv2rayagent/xray/conf/00_log.json
 {
   "log": {
-    "error": "/etc/v2ray-agent/xray/error.log",
+    "error": "/etcv2rayagent/xray/error.log",
     "loglevel": "warning"
   }
 }
@@ -2718,7 +2718,7 @@ EOF
 
 	# outbounds
 	if [[ -n "${pingIPv6}" ]]; then
-		cat <<EOF >/etc/v2ray-agent/xray/conf/10_ipv6_outbounds.json
+		cat <<EOF >/etcv2rayagent/xray/conf/10_ipv6_outbounds.json
 {
     "outbounds": [
         {
@@ -2731,7 +2731,7 @@ EOF
 EOF
 
 	else
-		cat <<EOF >/etc/v2ray-agent/xray/conf/10_ipv4_outbounds.json
+		cat <<EOF >/etcv2rayagent/xray/conf/10_ipv4_outbounds.json
 {
     "outbounds":[
         {
@@ -2758,7 +2758,7 @@ EOF
 	fi
 
 	# dns
-	cat <<EOF >/etc/v2ray-agent/xray/conf/11_dns.json
+	cat <<EOF >/etcv2rayagent/xray/conf/11_dns.json
 {
     "dns": {
         "servers": [
@@ -2777,7 +2777,7 @@ EOF
 		fallbacksList='{"dest":31296,"xver":1},{"alpn":"h2","dest":31302,"xver":0}'
 		getClients "${configPath}../tmp/04_trojan_TCP_inbounds.json" "${addClientsStatus}"
 
-		cat <<EOF >/etc/v2ray-agent/xray/conf/04_trojan_TCP_inbounds.json
+		cat <<EOF >/etcv2rayagent/xray/conf/04_trojan_TCP_inbounds.json
 {
 "inbounds":[
 	{
@@ -2807,14 +2807,14 @@ EOF
 	]
 }
 EOF
-		addClients "/etc/v2ray-agent/xray/conf/04_trojan_TCP_inbounds.json" "${addClientsStatus}"
+		addClients "/etcv2rayagent/xray/conf/04_trojan_TCP_inbounds.json" "${addClientsStatus}"
 	fi
 
 	# VLESS_WS_TLS
 	if echo "${selectCustomInstallType}" | grep -q 1 || [[ "$1" == "all" ]]; then
 		fallbacksList=${fallbacksList}',{"path":"/'${customPath}'ws","dest":31297,"xver":1}'
 		getClients "${configPath}../tmp/03_VLESS_WS_inbounds.json" "${addClientsStatus}"
-		cat <<EOF >/etc/v2ray-agent/xray/conf/03_VLESS_WS_inbounds.json
+		cat <<EOF >/etcv2rayagent/xray/conf/03_VLESS_WS_inbounds.json
 {
 "inbounds":[
     {
@@ -2843,7 +2843,7 @@ EOF
 ]
 }
 EOF
-		addClients "/etc/v2ray-agent/xray/conf/03_VLESS_WS_inbounds.json" "${addClientsStatus}"
+		addClients "/etcv2rayagent/xray/conf/03_VLESS_WS_inbounds.json" "${addClientsStatus}"
 	fi
 
 	# trojan_grpc
@@ -2852,7 +2852,7 @@ EOF
 			fallbacksList=${fallbacksList//31302/31304}
 		fi
 		getClients "${configPath}../tmp/04_trojan_gRPC_inbounds.json" "${addClientsStatus}"
-		cat <<EOF >/etc/v2ray-agent/xray/conf/04_trojan_gRPC_inbounds.json
+		cat <<EOF >/etcv2rayagent/xray/conf/04_trojan_gRPC_inbounds.json
 {
     "inbounds": [
         {
@@ -2883,14 +2883,14 @@ EOF
     ]
 }
 EOF
-		addClients "/etc/v2ray-agent/xray/conf/04_trojan_gRPC_inbounds.json" "${addClientsStatus}"
+		addClients "/etcv2rayagent/xray/conf/04_trojan_gRPC_inbounds.json" "${addClientsStatus}"
 	fi
 
 	# VMess_WS
 	if echo "${selectCustomInstallType}" | grep -q 3 || [[ "$1" == "all" ]]; then
 		fallbacksList=${fallbacksList}',{"path":"/'${customPath}'vws","dest":31299,"xver":1}'
 		getClients "${configPath}../tmp/05_VMess_WS_inbounds.json" "${addClientsStatus}"
-		cat <<EOF >/etc/v2ray-agent/xray/conf/05_VMess_WS_inbounds.json
+		cat <<EOF >/etcv2rayagent/xray/conf/05_VMess_WS_inbounds.json
 {
 "inbounds":[
 {
@@ -2920,12 +2920,12 @@ EOF
 ]
 }
 EOF
-		addClients "/etc/v2ray-agent/xray/conf/05_VMess_WS_inbounds.json" "${addClientsStatus}"
+		addClients "/etcv2rayagent/xray/conf/05_VMess_WS_inbounds.json" "${addClientsStatus}"
 	fi
 
 	if echo "${selectCustomInstallType}" | grep -q 5 || [[ "$1" == "all" ]]; then
 		getClients "${configPath}../tmp/06_VLESS_gRPC_inbounds.json" "${addClientsStatus}"
-		cat <<EOF >/etc/v2ray-agent/xray/conf/06_VLESS_gRPC_inbounds.json
+		cat <<EOF >/etcv2rayagent/xray/conf/06_VLESS_gRPC_inbounds.json
 {
     "inbounds":[
     {
@@ -2953,7 +2953,7 @@ EOF
 ]
 }
 EOF
-		addClients "/etc/v2ray-agent/xray/conf/06_VLESS_gRPC_inbounds.json" "${addClientsStatus}"
+		addClients "/etcv2rayagent/xray/conf/06_VLESS_gRPC_inbounds.json" "${addClientsStatus}"
 	fi
 
 	# VLESS_TCP
@@ -2963,7 +2963,7 @@ EOF
 		defaultPort=${customPort}
 	fi
 
-	cat <<EOF >/etc/v2ray-agent/xray/conf/02_VLESS_TCP_inbounds.json
+	cat <<EOF >/etcv2rayagent/xray/conf/02_VLESS_TCP_inbounds.json
 {
 "inbounds":[
 {
@@ -2995,8 +2995,8 @@ EOF
       ],
       "certificates": [
         {
-          "certificateFile": "/etc/v2ray-agent/tls/${domain}.crt",
-          "keyFile": "/etc/v2ray-agent/tls/${domain}.key",
+          "certificateFile": "/etcv2rayagent/tls/${domain}.crt",
+          "keyFile": "/etcv2rayagent/tls/${domain}.key",
           "ocspStapling": 3600,
           "usage":"encipherment"
         }
@@ -3007,14 +3007,14 @@ EOF
 ]
 }
 EOF
-	addClients "/etc/v2ray-agent/xray/conf/02_VLESS_TCP_inbounds.json" "${addClientsStatus}"
+	addClients "/etcv2rayagent/xray/conf/02_VLESS_TCP_inbounds.json" "${addClientsStatus}"
 }
 
 # 初始化Trojan-Go配置
 initTrojanGoConfig() {
 
 	echoContent skyBlue "\n进度 $1/${totalProgress} : 初始化Trojan配置"
-	cat <<EOF >/etc/v2ray-agent/trojan/config_full.json
+	cat <<EOF >/etcv2rayagent/trojan/config_full.json
 {
     "run_type": "server",
     "local_addr": "127.0.0.1",
@@ -3023,7 +3023,7 @@ initTrojanGoConfig() {
     "remote_port": 31300,
     "disable_http_check":true,
     "log_level":3,
-    "log_file":"/etc/v2ray-agent/trojan/trojan.log",
+    "log_file":"/etcv2rayagent/trojan/trojan.log",
     "password": [
         "${uuid}"
     ],
@@ -3053,7 +3053,7 @@ customCDNIP() {
 	echoContent red "\n=============================================================="
 	echoContent yellow "# 注意事项"
 	echoContent yellow "\n教程地址:"
-	echoContent skyBlue "https://github.com/mack-a/v2ray-agent/blob/master/documents/optimize_V2Ray.md"
+	echoContent skyBlue "https://github.com/moneyfly1/v2rayagent/blob/master/documents/optimize_V2Ray.md"
 	echoContent red "\n如对Cloudflare优化不了解，请不要使用"
 	echoContent yellow "\n 1.移动:104.16.123.96"
 	echoContent yellow " 2.联通:www.cloudflare.com"
@@ -3094,7 +3094,7 @@ defaultBase64Code() {
 
 			echoContent yellow " ---> 格式化明文(VLESS+TCP+TLS/xtls-rprx-direct)"
 			echoContent green "协议类型:VLESS，地址:${currentHost}，端口:${currentDefaultPort}，用户ID:${id}，安全:xtls，传输方式:tcp，flow:xtls-rprx-direct，账户名:${email}\n"
-			cat <<EOF >>"/etc/v2ray-agent/subscribe_tmp/${subAccount}"
+			cat <<EOF >>"/etcv2rayagent/subscribe_tmp/${subAccount}"
 vless://${id}@${currentHost}:${currentDefaultPort}?encryption=none&security=xtls&type=tcp&host=${currentHost}&headerType=none&sni=${currentHost}&flow=xtls-rprx-direct#${email}
 EOF
 			echoContent yellow " ---> 二维码 VLESS(VLESS+TCP+TLS/xtls-rprx-direct)"
@@ -3107,7 +3107,7 @@ EOF
 
 			echoContent yellow " ---> 格式化明文(VLESS+TCP+TLS/xtls-rprx-splice)"
 			echoContent green "    协议类型:VLESS，地址:${currentHost}，端口:${currentDefaultPort}，用户ID:${id}，安全:xtls，传输方式:tcp，flow:xtls-rprx-splice，账户名:${email/direct/splice}\n"
-			cat <<EOF >>"/etc/v2ray-agent/subscribe_tmp/${subAccount}"
+			cat <<EOF >>"/etcv2rayagent/subscribe_tmp/${subAccount}"
 vless://${id}@${currentHost}:${currentDefaultPort}?encryption=none&security=xtls&type=tcp&host=${currentHost}&headerType=none&sni=${currentHost}&flow=xtls-rprx-splice#${email/direct/splice}
 EOF
 			echoContent yellow " ---> 二维码 VLESS(VLESS+TCP+TLS/xtls-rprx-splice)"
@@ -3120,7 +3120,7 @@ EOF
 			echoContent yellow " ---> 格式化明文(VLESS+TCP+TLS/xtls-rprx-splice)"
 			echoContent green "    协议类型:VLESS，地址:${currentHost}，端口:${currentDefaultPort}，用户ID:${id}，安全:tls，传输方式:tcp，账户名:${email/direct/splice}\n"
 
-			cat <<EOF >>"/etc/v2ray-agent/subscribe_tmp/${subAccount}"
+			cat <<EOF >>"/etcv2rayagent/subscribe_tmp/${subAccount}"
 vless://${id}@${currentHost}:${currentDefaultPort}?security=tls&encryption=none&host=${currentHost}&headerType=none&type=tcp#${email}
 EOF
 			echoContent yellow " ---> 二维码 VLESS(VLESS+TCP+TLS)"
@@ -3133,7 +3133,7 @@ EOF
 
 		echoContent yellow " ---> 格式化明文(Trojan+TCP+TLS/xtls-rprx-direct)"
 		echoContent green "协议类型:Trojan，地址:${currentHost}，端口:${currentDefaultPort}，用户ID:${id}，安全:xtls，传输方式:tcp，flow:xtls-rprx-direct，账户名:${email}\n"
-		cat <<EOF >>"/etc/v2ray-agent/subscribe_tmp/${subAccount}"
+		cat <<EOF >>"/etcv2rayagent/subscribe_tmp/${subAccount}"
 trojan://${id}@${currentHost}:${currentDefaultPort}?encryption=none&security=xtls&type=tcp&host=${currentHost}&headerType=none&sni=${currentHost}&flow=xtls-rprx-direct#${email}
 EOF
 		echoContent yellow " ---> 二维码 Trojan(Trojan+TCP+TLS/xtls-rprx-direct)"
@@ -3146,7 +3146,7 @@ EOF
 
 		echoContent yellow " ---> 格式化明文(Trojan+TCP+TLS/xtls-rprx-splice)"
 		echoContent green "    协议类型:VLESS，地址:${currentHost}，端口:${currentDefaultPort}，用户ID:${id}，安全:xtls，传输方式:tcp，flow:xtls-rprx-splice，账户名:${email/direct/splice}\n"
-		cat <<EOF >>"/etc/v2ray-agent/subscribe_tmp/${subAccount}"
+		cat <<EOF >>"/etcv2rayagent/subscribe_tmp/${subAccount}"
 trojan://${id}@${currentHost}:${currentDefaultPort}?encryption=none&security=xtls&type=tcp&host=${currentHost}&headerType=none&sni=${currentHost}&flow=xtls-rprx-splice#${email/direct/splice}
 EOF
 		echoContent yellow " ---> 二维码 Trojan(Trojan+TCP+TLS/xtls-rprx-splice)"
@@ -3162,7 +3162,7 @@ EOF
 		echoContent green "    vmess://${qrCodeBase64Default}\n"
 		echoContent yellow " ---> 二维码 vmess(VMess+WS+TLS)"
 
-		cat <<EOF >>"/etc/v2ray-agent/subscribe_tmp/${subAccount}"
+		cat <<EOF >>"/etcv2rayagent/subscribe_tmp/${subAccount}"
 vmess://${qrCodeBase64Default}
 EOF
 		echoContent green "    https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=vmess://${qrCodeBase64Default}\n"
@@ -3178,7 +3178,7 @@ EOF
 		#		echoContent yellow " ---> 通用vmess(VMess+TCP+TLS)链接"
 		#		echoContent green "    vmess://${qrCodeBase64Default}\n"
 		#
-		#		cat <<EOF >>"/etc/v2ray-agent/subscribe_tmp/${subAccount}"
+		#		cat <<EOF >>"/etcv2rayagent/subscribe_tmp/${subAccount}"
 		#vmess://${qrCodeBase64Default}
 		#EOF
 		#		echoContent yellow " ---> 二维码 vmess(VMess+TCP+TLS)"
@@ -3192,7 +3192,7 @@ EOF
 		echoContent yellow " ---> 格式化明文(VLESS+WS+TLS)"
 		echoContent green "    协议类型:VLESS，地址:${currentAdd}，伪装域名/SNI:${currentHost}，端口:${currentDefaultPort}，用户ID:${id}，安全:tls，传输方式:ws，路径:/${currentPath}ws，账户名:${email}\n"
 
-		cat <<EOF >>"/etc/v2ray-agent/subscribe_tmp/${subAccount}"
+		cat <<EOF >>"/etcv2rayagent/subscribe_tmp/${subAccount}"
 vless://${id}@${currentAdd}:${currentDefaultPort}?encryption=none&security=tls&type=ws&host=${currentHost}&sni=${currentHost}&path=/${currentPath}ws#${email}
 EOF
 
@@ -3207,7 +3207,7 @@ EOF
 		echoContent yellow " ---> 格式化明文(VLESS+gRPC+TLS)"
 		echoContent green "    协议类型:VLESS，地址:${currentAdd}，伪装域名/SNI:${currentHost}，端口:${currentDefaultPort}，用户ID:${id}，安全:tls，传输方式:gRPC，alpn:h2，serviceName:${currentPath}grpc，账户名:${email}\n"
 
-		cat <<EOF >>"/etc/v2ray-agent/subscribe_tmp/${subAccount}"
+		cat <<EOF >>"/etcv2rayagent/subscribe_tmp/${subAccount}"
 vless://${id}@${currentAdd}:${currentDefaultPort}?encryption=none&security=tls&type=grpc&host=${currentHost}&path=${currentPath}grpc&serviceName=${currentPath}grpc&alpn=h2&sni=${currentHost}#${email}
 EOF
 		echoContent yellow " ---> 二维码 VLESS(VLESS+gRPC+TLS)"
@@ -3218,7 +3218,7 @@ EOF
 		echoContent yellow " ---> Trojan(TLS)"
 		echoContent green "    trojan://${id}@${currentHost}:${currentDefaultPort}?peer=${currentHost}&sni=${currentHost}&alpn=http/1.1#${currentHost}_Trojan\n"
 
-		cat <<EOF >>"/etc/v2ray-agent/subscribe_tmp/${subAccount}"
+		cat <<EOF >>"/etcv2rayagent/subscribe_tmp/${subAccount}"
 trojan://${id}@${currentHost}:${currentDefaultPort}?peer=${currentHost}&sni=${currentHost}&alpn=http/1.1#${email}_Trojan
 EOF
 		echoContent yellow " ---> 二维码 Trojan(TLS)"
@@ -3229,7 +3229,7 @@ EOF
 
 		echoContent yellow " ---> Trojan gRPC(TLS)"
 		echoContent green "    trojan://${id}@${currentAdd}:${currentDefaultPort}?encryption=none&peer=${currentHost}&security=tls&type=grpc&sni=${currentHost}&alpn=h2&path=${currentPath}trojangrpc&serviceName=${currentPath}trojangrpc#${email}\n"
-		cat <<EOF >>"/etc/v2ray-agent/subscribe_tmp/${subAccount}"
+		cat <<EOF >>"/etcv2rayagent/subscribe_tmp/${subAccount}"
 trojan://${id}@${currentAdd}:${currentDefaultPort}?encryption=none&peer=${currentHost}&security=tls&type=grpc&sni=${currentHost}&alpn=h2&path=${currentPath}trojangrpc&serviceName=${currentPath}trojangrpc#${email}
 EOF
 		echoContent yellow " ---> 二维码 Trojan gRPC(TLS)"
@@ -3238,7 +3238,7 @@ EOF
 	elif [[ "${type}" == "hysteria" ]]; then
 		echoContent yellow " ---> Hysteria(TLS)"
 		echoContent green "    hysteria://${currentHost}:${hysteriaPort}?protocol=${hysteriaProtocol}&auth=${id}&peer=${currentHost}&insecure=0&alpn=h3&upmbps=${hysteriaClientUploadSpeed}&downmbps=${hysteriaClientDownloadSpeed}#${email}\n"
-		cat <<EOF >>"/etc/v2ray-agent/subscribe_tmp/${subAccount}"
+		cat <<EOF >>"/etcv2rayagent/subscribe_tmp/${subAccount}"
 hysteria://${currentHost}:${hysteriaPort}?protocol=${hysteriaProtocol}&auth=${id}&peer=${currentHost}&insecure=0&alpn=h3&upmbps=${hysteriaClientUploadSpeed}&downmbps=${hysteriaClientDownloadSpeed}#${email}
 EOF
 		echoContent yellow " ---> 二维码 Hysteria(TLS)"
@@ -3414,14 +3414,14 @@ checkNginx302() {
 # 备份恢复nginx文件
 backupNginxConfig() {
 	if [[ "$1" == "backup" ]]; then
-		cp /etc/nginx/conf.d/alone.conf /etc/v2ray-agent/alone_backup.conf
+		cp /etc/nginx/conf.d/alone.conf /etcv2rayagent/alone_backup.conf
 		echoContent green " ---> nginx配置文件备份成功"
 	fi
 
-	if [[ "$1" == "restoreBackup" ]] && [[ -f "/etc/v2ray-agent/alone_backup.conf" ]]; then
-		cp /etc/v2ray-agent/alone_backup.conf /etc/nginx/conf.d/alone.conf
+	if [[ "$1" == "restoreBackup" ]] && [[ -f "/etcv2rayagent/alone_backup.conf" ]]; then
+		cp /etcv2rayagent/alone_backup.conf /etc/nginx/conf.d/alone.conf
 		echoContent green " ---> nginx配置文件恢复备份成功"
-		rm /etc/v2ray-agent/alone_backup.conf
+		rm /etcv2rayagent/alone_backup.conf
 	fi
 
 }
@@ -3496,9 +3496,9 @@ updateNginxBlog() {
 	if [[ "${selectInstallNginxBlogType}" =~ ^[1-9]$ ]]; then
 		rm -rf /usr/share/nginx/*
 		if wget --help | grep -q show-progress; then
-			wget -c -q --show-progress -P /usr/share/nginx "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/fodder/blog/unable/html${selectInstallNginxBlogType}.zip" >/dev/null
+			wget -c -q --show-progress -P /usr/share/nginx "https://raw.githubusercontent.com/moneyfly1/v2rayagent/master/fodder/blog/unable/html${selectInstallNginxBlogType}.zip" >/dev/null
 		else
-			wget -c -P /usr/share/nginx "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/fodder/blog/unable/html${selectInstallNginxBlogType}.zip" >/dev/null
+			wget -c -P /usr/share/nginx "https://raw.githubusercontent.com/moneyfly1/v2rayagent/master/fodder/blog/unable/html${selectInstallNginxBlogType}.zip" >/dev/null
 		fi
 
 		unzip -o "/usr/share/nginx/html${selectInstallNginxBlogType}.zip" -d /usr/share/nginx/html >/dev/null
@@ -3631,15 +3631,15 @@ unInstall() {
 	rm -rf /root/.acme.sh
 	echoContent green " ---> 删除acme.sh完成"
 
-	rm -rf /tmp/v2ray-agent-tls/*
-	if [[ -d "/etc/v2ray-agent/tls" ]] && [[ -n $(find /etc/v2ray-agent/tls/ -name "*.key") ]] && [[ -n $(find /etc/v2ray-agent/tls/ -name "*.crt") ]]; then
-		mv /etc/v2ray-agent/tls /tmp/v2ray-agent-tls
-		if [[ -n $(find /tmp/v2ray-agent-tls -name '*.key') ]]; then
-			echoContent yellow " ---> 备份证书成功，请注意留存。[/tmp/v2ray-agent-tls]"
+	rm -rf /tmpv2rayagent-tls/*
+	if [[ -d "/etcv2rayagent/tls" ]] && [[ -n $(find /etcv2rayagent/tls/ -name "*.key") ]] && [[ -n $(find /etcv2rayagent/tls/ -name "*.crt") ]]; then
+		mv /etcv2rayagent/tls /tmpv2rayagent-tls
+		if [[ -n $(find /tmpv2rayagent-tls -name '*.key') ]]; then
+			echoContent yellow " ---> 备份证书成功，请注意留存。[/tmpv2rayagent-tls]"
 		fi
 	fi
 
-	rm -rf /etc/v2ray-agent
+	rm -rf /etcv2rayagent
 	rm -rf ${nginxConfigPath}alone.conf
 
 	if [[ -d "/usr/share/nginx/html" && -f "/usr/share/nginx/html/check" ]]; then
@@ -3732,12 +3732,12 @@ customUUID() {
 	else
 		jq -r -c '.inbounds[0].settings.clients[].id' ${configPath}${frontingType}.json | while read -r line; do
 			if [[ "${line}" == "${currentCustomUUID}" ]]; then
-				echo >/tmp/v2ray-agent
+				echo >/tmpv2rayagent
 			fi
 		done
-		if [[ -f "/tmp/v2ray-agent" && -n $(cat /tmp/v2ray-agent) ]]; then
+		if [[ -f "/tmpv2rayagent" && -n $(cat /tmpv2rayagent) ]]; then
 			echoContent red " ---> UUID不可重复"
-			rm /tmp/v2ray-agent
+			rm /tmpv2rayagent
 			exit 0
 		fi
 	fi
@@ -3758,12 +3758,12 @@ customUserEmail() {
 	else
 		jq -r -c '.inbounds[0].settings.clients[].email' ${configPath}${frontingType}.json | while read -r line; do
 			if [[ "${line}" == "${currentCustomEmail}" ]]; then
-				echo >/tmp/v2ray-agent
+				echo >/tmpv2rayagent
 			fi
 		done
-		if [[ -f "/tmp/v2ray-agent" && -n $(cat /tmp/v2ray-agent) ]]; then
+		if [[ -f "/tmpv2rayagent" && -n $(cat /tmpv2rayagent) ]]; then
 			echoContent red " ---> email不可重复"
-			rm /tmp/v2ray-agent
+			rm /tmpv2rayagent
 			exit 0
 		fi
 	fi
@@ -3942,22 +3942,22 @@ removeUser() {
 # 更新脚本
 updateV2RayAgent() {
 	echoContent skyBlue "\n进度  $1/${totalProgress} : 更新v2ray-agent脚本"
-	rm -rf /etc/v2ray-agent/install.sh
+	rm -rf /etcv2rayagent/install.sh
 	if wget --help | grep -q show-progress; then
-		wget -c -q --show-progress -P /etc/v2ray-agent/ -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh"
+		wget -c -q --show-progress -P /etcv2rayagent/ -N --no-check-certificate "https://raw.githubusercontent.com/moneyfly1/v2rayagent/master/install.sh"
 	else
-		wget -c -q -P /etc/v2ray-agent/ -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh"
+		wget -c -q -P /etcv2rayagent/ -N --no-check-certificate "https://raw.githubusercontent.com/moneyfly1/v2rayagent/master/install.sh"
 	fi
 
-	sudo chmod 700 /etc/v2ray-agent/install.sh
+	sudo chmod 700 /etcv2rayagent/install.sh
 	local version
-	version=$(grep '当前版本:v' "/etc/v2ray-agent/install.sh" | awk -F "[v]" '{print $2}' | tail -n +2 | head -n 1 | awk -F "[\"]" '{print $1}')
+	version=$(grep '当前版本:v' "/etcv2rayagent/install.sh" | awk -F "[v]" '{print $2}' | tail -n +2 | head -n 1 | awk -F "[\"]" '{print $1}')
 
 	echoContent green "\n ---> 更新完毕"
 	echoContent yellow " ---> 请手动执行[vasma]打开脚本"
 	echoContent green " ---> 当前版本:${version}\n"
 	echoContent yellow "如更新不成功，请手动执行下面命令\n"
-	echoContent skyBlue "wget -P /root -N --no-check-certificate https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh && chmod 700 /root/install.sh && /root/install.sh"
+	echoContent skyBlue "wget -P /root -N --no-check-certificate https://raw.githubusercontent.com/moneyfly1/v2rayagent/master/install.sh && chmod 700 /root/install.sh && /root/install.sh"
 	echo
 	exit 0
 }
@@ -4055,10 +4055,10 @@ EOF
 		tail -f ${configPathLog}error.log
 		;;
 	4)
-		tail -n 100 /etc/v2ray-agent/crontab_tls.log
+		tail -n 100 /etcv2rayagent/crontab_tls.log
 		;;
 	5)
-		tail -n 100 /etc/v2ray-agent/tls/acme.log
+		tail -n 100 /etcv2rayagent/tls/acme.log
 		;;
 	6)
 		echo >${configPathLog}access.log
@@ -4070,12 +4070,12 @@ EOF
 # 脚本快捷方式
 aliasInstall() {
 
-	if [[ -f "$HOME/install.sh" ]] && [[ -d "/etc/v2ray-agent" ]] && grep <"$HOME/install.sh" -q "作者:mack-a"; then
-		mv "$HOME/install.sh" /etc/v2ray-agent/install.sh
+	if [[ -f "$HOME/install.sh" ]] && [[ -d "/etcv2rayagent" ]] && grep <"$HOME/install.sh" -q "作者:mack-a"; then
+		mv "$HOME/install.sh" /etcv2rayagent/install.sh
 		local vasmaType=
 		if [[ -d "/usr/bin/" ]]; then
 			if [[ ! -f "/usr/bin/vasma" ]]; then
-				ln -s /etc/v2ray-agent/install.sh /usr/bin/vasma
+				ln -s /etcv2rayagent/install.sh /usr/bin/vasma
 				chmod 700 /usr/bin/vasma
 				vasmaType=true
 			fi
@@ -4083,7 +4083,7 @@ aliasInstall() {
 			rm -rf "$HOME/install.sh"
 		elif [[ -d "/usr/sbin" ]]; then
 			if [[ ! -f "/usr/sbin/vasma" ]]; then
-				ln -s /etc/v2ray-agent/install.sh /usr/sbin/vasma
+				ln -s /etcv2rayagent/install.sh /usr/sbin/vasma
 				chmod 700 /usr/sbin/vasma
 				vasmaType=true
 			fi
@@ -4506,7 +4506,7 @@ dokodemoDoorUnblockStreamingMedia() {
 	echoContent skyBlue "\n功能 1/${totalProgress} : 任意门落地机解锁流媒体"
 	echoContent red "\n=============================================================="
 	echoContent yellow "# 注意事项"
-	echoContent yellow "任意门解锁详解，请查看此文章[https://github.com/mack-a/v2ray-agent/blob/master/documents/netflix/dokodemo-unblock_netflix.md]\n"
+	echoContent yellow "任意门解锁详解，请查看此文章[https://github.com/moneyfly1/v2rayagent/blob/master/documents/netflix/dokodemo-unblock_netflix.md]\n"
 
 	echoContent yellow "1.添加出站"
 	echoContent yellow "2.添加入站"
@@ -5231,7 +5231,7 @@ unInstallHysteriaCore() {
 		exit 0
 	fi
 	handleHysteria stop
-	rm -rf /etc/v2ray-agent/hysteria/*
+	rm -rf /etcv2rayagent/hysteria/*
 	rm -rf /etc/systemd/system/hysteria.service
 	echoContent green " ---> 卸载完成"
 }
@@ -5293,18 +5293,18 @@ subscribe() {
 		echoContent skyBlue "-------------------------备注---------------------------------"
 		echoContent yellow "# 查看订阅时会重新生成订阅"
 		echoContent yellow "# 每次添加、删除账号需要重新查看订阅"
-		rm -rf /etc/v2ray-agent/subscribe/*
-		rm -rf /etc/v2ray-agent/subscribe_tmp/*
+		rm -rf /etcv2rayagent/subscribe/*
+		rm -rf /etcv2rayagent/subscribe_tmp/*
 		showAccounts >/dev/null
-		mv /etc/v2ray-agent/subscribe_tmp/* /etc/v2ray-agent/subscribe/
+		mv /etcv2rayagent/subscribe_tmp/* /etcv2rayagent/subscribe/
 
-		if [[ -n $(ls /etc/v2ray-agent/subscribe/) ]]; then
-			find /etc/v2ray-agent/subscribe/* | while read -r email; do
+		if [[ -n $(ls /etcv2rayagent/subscribe/) ]]; then
+			find /etcv2rayagent/subscribe/* | while read -r email; do
 				email=$(echo "${email}" | awk -F "[b][e][/]" '{print $2}')
 
 				local base64Result
-				base64Result=$(base64 -w 0 "/etc/v2ray-agent/subscribe/${email}")
-				echo "${base64Result}" >"/etc/v2ray-agent/subscribe/${email}"
+				base64Result=$(base64 -w 0 "/etcv2rayagent/subscribe/${email}")
+				echo "${base64Result}" >"/etcv2rayagent/subscribe/${email}"
 				echoContent skyBlue "--------------------------------------------------------------"
 				echoContent yellow "email:${email}\n"
 				local currentDomain=${currentHost}
@@ -5402,12 +5402,12 @@ menu() {
 	echoContent red "\n=============================================================="
 	echoContent green "作者:mack-a"
 	echoContent green "当前版本:v2.6.9"
-	echoContent green "Github:https://github.com/mack-a/v2ray-agent"
+	echoContent green "Github:https://github.com/moneyfly1/v2rayagent"
 	echoContent green "描述:八合一共存脚本\c"
 	showInstallStatus
 	echoContent red "\n=============================================================="
 	echoContent red "                        推广区                      "
-	echoContent green "AFF捐赠：https://github.com/mack-a/v2ray-agent/blob/master/documents/donation_aff.md\n"
+	echoContent green "AFF捐赠：https://github.com/moneyfly1/v2rayagent/blob/master/documents/donation_aff.md\n"
 	echoContent green "虚拟币捐赠：0xB08b731653515b083deE362fefFc45d5eb96c35d\n"
 	echoContent green "推广可联系TG：https://t.me/mackaff"
 	echoContent red "=============================================================="
